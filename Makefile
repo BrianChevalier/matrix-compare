@@ -22,3 +22,6 @@ site: build
 	rm -rf $(DIR)
 
 deploy: site
+	git checkout gh-pages
+	git push --set-upstream origin gh-pages --force
+	git checkout main

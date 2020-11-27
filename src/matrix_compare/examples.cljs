@@ -1,4 +1,4 @@
-(ns examples)
+(ns matrix-compare.examples)
 
 (def examples
   [{:description "Importing"
