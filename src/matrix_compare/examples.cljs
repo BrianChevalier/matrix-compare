@@ -80,10 +80,10 @@
                   :out ""
                   :fn :core.matrix/transpose}}
 
-   {:description "Invert a matrix"
-    :MATLAB {:in "inv(a)"
+   {:description "Compute the linear algebraic norm"
+    :MATLAB {:in "norm(a)"
              :out ""
-             :fn :MATLAB/inv}
+             :fn :MATLAB/norm}
     :numpy   {:in "np.linalg.norm(a)"
               :out ""
               :fn :numpy.linalg/norm}
