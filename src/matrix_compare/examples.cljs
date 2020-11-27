@@ -2,9 +2,9 @@
 
 (def examples
   [{:description "Importing"
-    :Clojure {:in "(:require\n[clojure.core.matrix :as m])\n[clojure.core.matrix.linear :as lin]"
-              :out ""}
-    :NumPy {:in "import numpy as np\nimport numpy.linalg as lin"
+    :core.matrix {:in "(:require\n[clojure.core.matrix :as m])\n[clojure.core.matrix.linear :as lin]"
+                  :out ""}
+    :numpy {:in "import numpy as np\nimport numpy.linalg as lin"
             :out ""}
     :MATLAB {:in ""
              :out ""}}
@@ -12,61 +12,90 @@
    ;; Constructors
    {:description "Array and matrix construction"
     :MATLAB {:in "[0 1 2;\n 3 4 5]"}
-    :NumPy {:in "np.array([[0, 1, 2],\n          [3, 4, 5]])"}
-    :Clojure {:in "(array [[0 1 2]\n        [3 4 5]])"}}
+    :numpy {:in "np.array([[0, 1, 2],\n          [3, 4, 5]])"}
+    :core.matrix {:in "(array [[0 1 2]\n        [3 4 5]])"}}
 
    {:description "Identity Matrix"
     :MATLAB {:in "eye(3)"
              :fn :MATLAB/eye}
-    :NumPy {:in "np.eye(3)"
+    :numpy {:in "np.eye(3)"
             :fn :numpy/eye}
-    :Clojure {:in "(m/identity-matrix 2)"
-              :out "[[1 1]\n [1 1]]"
-              :fn :core.matrix/identity-matrix}}
+    :core.matrix {:in "(m/identity-matrix 2)"
+                  :out "[[1 1]\n [1 1]]"
+                  :fn :core.matrix/identity-matrix}}
    {:description "Create a square diagonal matrix"
-    :MATLAB {:in "diag([0 1 2])" :fn :MATLAB/diag}
-    :NumPy {:in "np.diag(np.array([0, 1, 2]))" :fn :numpy/diag}}
+    :MATLAB {:in "diag([0 1 2])"
+             :fn :MATLAB/diag}
+    :numpy {:in "np.diag(np.array([0, 1, 2]))"
+            :fn :numpy/diag}
+    :core.matrix {:in "(diagonal-matrix )"
+                  :fn :core.matrix/diagonal-matrix}}
 
    ;; Operators
    {:description "Addition"
     :MATLAB {:in  "[1 2 3] + [4 5 6]"
-             :out "[5 7 9]"}
-    :NumPy {:in "[1, 2, 3] + [4, 5, 6]"
-            :out ""}
-    :Clojure {:in  "(+ [1 2 3] [4 5 6])"
-              :out "[5 7 9]"}}
-
+             :out "[5 7 9]"
+             :fn :MATLAB/plus}
+    :numpy {:in "[1, 2, 3] + [4, 5, 6]"
+            :out ""
+            :fn :numpy/add}
+    :core.matrix {:in  "(+ [1 2 3] [4 5 6])"
+                  :out "[5 7 9]"
+                  :fn :core.matrix.operators/+}}
    {:description "Subtraction"
     :MATLAB {:in "a - b"
-             :out ""}
-    :NumPy   {:in "a - b" :out ""}
-    :Clojure {:in "(- a b)" :out ""}}
+             :out ""
+             :fn :MATLAB/minus}
+    :numpy   {:in "a - b"
+              :out ""
+              :fn :numpy/subtract}
+    :core.matrix {:in "(- a b)"
+                  :out ""
+                  :fn :core.matrix.operators/-}}
+   {:description "Element-wise multiplication"
+    :MATLAB {:in "a.*b"
+             :fn :MATLAB/times}
+    :numpy {:in "a * b"}
+    :core.matrix {:in "(* a b)"
+                  :fn :core.matrix.operators/*}}
 
    {:description "Matrix Multiplication"
     :MATLAB {:in "[0 1 2]*[0; 1; 2]"
-             :out "5"}
-    :Clojure {:in "(m/mmul )"
-              :out ""
-              :fn :core.matrix/mmul}}
+             :out "5"
+             :fn :MATLAB/mtimes}
+    :numpy {:in "np.matmul()"
+            :fn :numpy/matmul}
+    :core.matrix {:in "(m/mmul )"
+                  :out ""
+                  :fn :core.matrix/mmul}}
 
    {:description "Transpose"
-    :MATLAB {:in "a'"  :out ""
+    :MATLAB {:in "a'"
+             :out ""
              :fn :MATLAB/transpose}
-    :NumPy   {:in "a.T" :out "" :fn :numpy/transpose}
-    :Clojure {:in "(m/transpose a)"
+    :numpy   {:in "a.T"
               :out ""
-              :fn :core.matrix/transpose}}
+              :fn :numpy/transpose}
+    :core.matrix {:in "(m/transpose a)"
+                  :out ""
+                  :fn :core.matrix/transpose}}
 
-   {:description "Inverse"
-    :MATLAB
-    {:in "inv(a)"  :out ""}
-    :NumPy   "np.linalg.norm(a)"
-    :Clojure "(lin/norm a)"}
+   {:description "Invert a matrix"
+    :MATLAB {:in "inv(a)"
+             :out ""
+             :fn :MATLAB/inv}
+    :numpy   {:in "np.linalg.norm(a)"
+              :out ""
+              :fn :numpy.linalg/norm}
+    :core.matrix {:in "(lin/norm a)"
+                  :out ""
+                  :fn :core.matrix.linear/norm}}
 
-   {:description "Shape"
+   {:description "Get the shape of a matrix/array"
     :MATLAB {:in "a + b"
              :out ""}
-    :NumPy {:in "a.shape"
+    :numpy {:in "a.shape"
             :out "[3 2]"}
-    :Clojure {:in "(shape [[1 2]\n[3 4]\n[5 6]])"
-              :out "[3 2]"}}])
+    :core.matrix {:in "(shape [[1 2]\n[3 4]\n[5 6]])"
+                  :out "[3 2]"
+                  :fn :core.matrix/shape}}])
