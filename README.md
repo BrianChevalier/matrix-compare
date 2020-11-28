@@ -1,12 +1,12 @@
 # Matrix Compare
 
-A comparison of different languages and to do common linear algebraic operations between them. Inspired by [Numpy for MATLAB users](https://numpy.org/doc/stable/user/numpy-for-matlab-users.html). Visual site available [here](https://brianchevalier.github.io/matrix-compare/). Pull requests welcome!
+A comparison of different languages/libraries and how to translate common linear algebraic operations between them. Inspired by [Numpy for MATLAB users](https://numpy.org/doc/stable/user/numpy-for-matlab-users.html). Visual site available [here](https://brianchevalier.github.io/matrix-compare/). Pull requests welcome!
 
 ## Development
 
     make dev
 
-Each example is stored under `src/matrix_compare/examples.cljs` in a list of maps, where each maps looks like the following:
+Each example is stored under `src/matrix_compare/examples.cljs` in a list of maps, where each map looks like the following:
 
 ```
 {:description "Create a new array"     ; description of the example
