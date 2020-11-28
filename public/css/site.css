@@ -1,18 +1,18 @@
 body {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
   margin: 0 auto;
-  padding-top: 72px;
+  padding-top: 20px;
   padding-left: 10px;
   padding-right: 10px;
+  padding-bottom: 10px;
   -webkit-font-smoothing: antialiased;
   font-size: 1.125em;
   color: #333;
   line-height: 1.5em;
+  background-color: #2E3440;
+  color:white;
 }
 
-h1, h2, h3 {
-  color: #000;
-}
 h1 {
   font-size: 2.5em
 }
@@ -27,9 +27,15 @@ h3 {
 
 a {
   text-decoration: none;
-  color: #09f;
+  color: #5E81AC;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
 }
