@@ -8,6 +8,20 @@
             :out ""}
     :MATLAB {:in ""
              :out ""}}
+   {:type :text
+    :description "Indexing"
+    :core.matrix {:text "zero-based indexing"}
+    :MATLAB {:text "one-based indexing"}
+    :numpy {:text "zero-based indexing"}
+    :math.js {:text "zero-based indexing"}}
+   {:type :text
+    :description "Value semantics"
+    :MATLAB {:text [:span "Pass-by-value sematics. When a function takes an input, 
+                    it cannot mutate the array in place. "
+                    [:a {:href "https://www.mathworks.com/help/matlab/matlab_prog/avoid-unnecessary-copies-of-data.html"} "Read more."]]}
+    :core.matrix {:text "Pass-by-value by default. All operations create a 'new' arrays, unless using mutable views and mutating functions.
+                         Varies by implementation."}
+    :numpy {:text "Pass-by-reference semantics. Array slices are mutable views of an array. To copy an array use np.copy(A)."}}
 
    ;; Constructors
    "Constructors"
@@ -23,15 +37,24 @@
              :fn :MATLAB/eye}
     :numpy {:in "np.eye(3)"
             :fn :numpy/eye}
-    :core.matrix {:in "(m/identity-matrix 2)"
-                  :fn :core.matrix/identity-matrix}}
+    :core.matrix {:in "(m/identity-matrix 3)"
+                  :fn :core.matrix/identity-matrix}
+    :math.js {:in "math.identity(n)"
+              :fn :math.js/identity}}
    {:description "Zeros"
     :MATLAB {:in "zeros(rows, cols)"}
     :numpy {:in "np.zeros((rows, cols))"
             :fn :numpy/zeros}
     :core.matrix {:in "(m/zero-array [rows cols])"
                   :fn :core.matrix/zero-array}}
-   {:description "Create a square diagonal matrix"
+   {:description "Ones Matrix"
+    :MATLAB {:in "ones(n, m)"
+             :fn :MATLAB/ones}
+    :numpy {:in "np.ones((n, m))"
+            :fn :numpy/ones}
+    :math.js {:in "math.ones(n, m)"
+              :fn :math.js/ones}}
+   {:description "Create a square diagonal matrix, with the vector a on the main diagonal"
     :MATLAB {:in "diag(a)"
              :fn :MATLAB/diag}
     :numpy {:in "np.diag(a)"
@@ -118,6 +141,13 @@
               :fn :math.js/cross}
     :core.matrix {:in "(m/cross a b)"
                   :fn :core.matrix/cross}}
+   {:description "Trace (sum of diagonal) of A"
+    :core.matrix {:in "(m/trace A)"
+                  :fn :core.matrix/trace}
+    :numpy {:in "np.trace(A)"
+            :fn :numpy/trace}
+    :MATLAB {:in "trace(A)"
+             :fn :MATLAB/trace}}
 
    {:description "Transpose"
     :MATLAB {:in "a'"
@@ -190,14 +220,25 @@
                   :out "{:L [] :U [] :P []}"
                   :fn :core.matrix.linear/lu}}
 
+   "Metadata"
    {:description "Get the shape of a matrix/array"
-    :MATLAB {:in "a + b"
+    :MATLAB {:in "size(a)"
              :out ""}
-    :numpy {:in "a.shape"
-            :out "[3 2]"}
-    :core.matrix {:in "(m/shape [[1 2]\n[3 4]\n[5 6]])"
-                  :out "[3 2]"
+    :numpy {:in "a.shape"}
+    :core.matrix {:in "(m/shape a)"
                   :fn :core.matrix/shape}}
+   {:description "Get number of rows in matrix, m"
+    :core.matrix {:in "(m/row-count m)"
+                  :fn :core.matrix/row-count}}
+   {:description "Get number of columns in matrix, m"
+    :core.matrix {:in "(m/column-count m)"
+                  :fn :core.matrix/column-count}}
+   {:description "Dimensionality"
+    :core.matrix {:in "(m/dimensionality A)"
+                  :fn :core.matrix/dimensionality}}
+   {:description "Get size of specified dimension in matrix m"
+    :core.matrix {:in "(m/dimension-count m dim)"
+                  :fn :core.matrix/dimension-count}}
 
    ;; Indexing
    "Indexing and Slicing"
@@ -211,25 +252,45 @@
     :numpy {:in "a[:, 2]"}
     :core.matrix {:in "(m/get-column a 1)"
                   :fn :core.matrix/get-column}}
-   {:description "Get an element from an array"
-    :core.matrix {:in "(m/mget 1 2)"
+   {:description "Get the element from row 2, column 3"
+    :MATLAB {:in "a(2, 3)"}
+    :numpy {:in "a[1, 2]"}
+    :core.matrix {:in "(m/mget a 1 2)"
                   :fn :core.matrix/mget}}
+   {:description "Set the value at row 2, column 3 to 1"
+    :MATLAB {:in "a(2, 3) = 1"}
+    :numpy {:in "a[1, 2] = 1"}
+    :core.matrix {:in "(m/mset a 1 2 1)"
+                  :fn :core.matrix/mset}}
+   {:description "Get last element in vector"
+    :numpy {:in "a[-1]"}
+    :MATLAB {:in "a(end)"}}
    {:description "Select"
-    :MATLAB {:in "a([2,4,5],[1,3])"}
+    :MATLAB {:in "a([2 4 5], [1 3])"}
     :numpy {:in "a[np.ix_([1, 3, 4], [0, 2])]"
             :fn :numpy/ix_}
     :core.matrix {:in "(m/select a [1 3 4] [0 2])"
                   :fn :core.matrix/select}}
-   {:description "Set scalar value at an index"
-    :MATLAB {:in "a() = "}
-    :numpy {:in "a() = "}
-    :core.matrix {:in "(m/mset a [])"
-                  :fn :core.matrix/mset}}
    {:description "Set selection"
-    :MATLAB {:in "a() = "}
-    :core.matrix {:in "(m/set-selection a [] [])"
+    :MATLAB {:in "a([2 4 5], [1 3]) = [0 0; 0 0; 0 0]"}
+    :core.matrix {:in "(m/set-selection a [1 3 4] [0 2]\n[[0 0] [0 0] [0 0]])"
                   :fn :core.matrix/set-selection}}
+   {:description "Set row i of matrix m with vector row"
+    :core.matrix {:in "(m/set-row m i row)"
+                  :fn :core.matrix/set-row}}
+   {:description "Multiply row i of matrix, m, by factor"
+    :core.matrix {:in "(m/multiply-row m i factor)"
+                  :fn :core.matrix/multiply-row}}
+   {:description "Set column i of matrix m with vector column"
+    :core.matrix {:in "(m/set-column m i column)"}}
 
+   {:description "Broadcasting"
+    :type :text
+    :core.matrix {:text [:span "Broadcasting similar to NumPy"]}
+    :MATLAB {:text [:span "Implicit Expansion"]
+             :note "Implicit expansion is not very well documented."}
+    :numpy {:text [:span [:a {:href "https://numpy.org/doc/stable/user/theory.broadcasting.html#array-broadcasting-in-numpy"} "Array broadcasting"]]}}
+   
    ;; Other relevant language features
    "Other relevant language features"
    {:description "Anonymous function"
@@ -241,7 +302,10 @@
              :fn :MATLAB/function_handle}}
    {:description "Function"
     :MATLAB {:in "function [c] = func(a, b)\n    c = a + b;\nend"
-             :fn :MATLAB/function}
+             :fn :MATLAB/function
+             :note "File-local functions must be at the end of the file. 
+                    For a function to be used in another file, the function 
+                    name must match the file name exactly."}
     :numpy {:in "def func(a, b):\n    return a + b"
             :fn :python.control-flow/defining-functions}
     :core.matrix {:in "(defn func [a b]\n    (+ a b))"
@@ -250,4 +314,11 @@
     :numpy {:in "[i for i in range(n)]"
             :fn :python.data-structures/list-comprehensions}
     :core.matrix {:in "(for [i (range n)] i)"
-                  :fn :clojure.core/for}}])
+                  :fn :clojure.core/for}}
+   {:description "Dictionaries/maps (Associative arrays)"
+    :numpy {:in "{'key': 'value'}"}
+    :MATLAB {:in "containers.Map({'key'}, {'value'})"
+             :fn :MATLAB/containers.map
+             :note "Not very widely used"}
+    :core.matrix {:in "{:key 'value'}"
+                  :fn :clojure.core/hash-map}}])
