@@ -9,16 +9,20 @@
   (r/atom {:MATLAB      true
            :core.matrix true
            :numpy       true
-           :math.js     true}))
+           :math.js     false
+           :julia       false
+           :R           false}))
 
 (def titles
   {:MATLAB      "MATLAB"
    :core.matrix "Clojure (clojure.core.matrix)"
    :numpy       "Python (NumPy)"
-   :math.js     "JavaScript (math.js)"})
+   :math.js     "JavaScript (math.js)"
+   :julia       "Julia (LinearAlgebra.jl)"
+   :R           "R"})
 
 (def libs
-  [:core.matrix :MATLAB :numpy :math.js])
+  [:core.matrix :MATLAB :numpy :math.js :julia :R])
 
 (defn item
   [item ks]

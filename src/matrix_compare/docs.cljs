@@ -21,5 +21,7 @@
         "python.data-structures" (str "https://docs.python.org/3/tutorial/datastructures.html#" name)
         "MATLAB"                 (str "https://www.mathworks.com/help/matlab/ref/" name ".html")
         "math.js"                (str "https://mathjs.org/docs/reference/functions/" name ".html")
+        "julia.LinearAlgebra"    (str "https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra." name)
+        "R.intro"                (str "https://cran.r-project.org/doc/manuals/r-release/R-intro.html#" name)
         ""))
     nil))
