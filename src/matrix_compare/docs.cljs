@@ -10,9 +10,9 @@
     (let [namespace (namespace fn-key)
           name      (name fn-key)]
       (case namespace
-        "core.matrix"            (str "https://mikera.github.io/core.matrix/doc/clojure.core.matrix.html#var-" name)
-        "core.matrix.linear"     (str "https://mikera.github.io/core.matrix/doc/clojure.core.matrix.linear.html#var-" name)
-        "core.matrix.operators"  (str "https://mikera.github.io/core.matrix/doc/clojure.core.matrix.operators.html#var-" name)
+        "core.matrix"            (str "https://cljdoc.org/d/net.mikera/core.matrix/0.62.0/api/clojure.core.matrix#" name)
+        "core.matrix.linear"     (str "https://cljdoc.org/d/net.mikera/core.matrix/0.62.0/api/clojure.core.matrix.linear#" name)
+        "core.matrix.operators"  (str "https://cljdoc.org/d/net.mikera/core.matrix/0.62.0/api/clojure.core.matrix.operators#" name)
         "clojure.core"           (str "https://clojuredocs.org/clojure.core/" name)
         "numpy"                  (str "https://numpy.org/doc/stable/reference/generated/numpy." name ".html")
         "numpy.linalg"           (str "https://numpy.org/doc/stable/reference/generated/numpy.linalg." name ".html")
