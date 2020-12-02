@@ -52,18 +52,25 @@
     :numpy {:in "np.ones((n, m))"
             :fn :numpy/ones}
     :math.js {:in "math.ones(n, m)"
-              :fn :math.js/ones}}
+              :fn :math.js/ones}
+    :core.matrix {:in "(defn ones [n m]\n  (+ (m/zero-array [n m]) 1))"
+                  :note "There is no built in 'ones' function 
+                         in core.matrix, currently, however it can be created like this."}}
    {:description "Evenly spaced array from a to b with n points"
     :numpy {:in "np.linspace(a, b, n)"
             :fn :numpy/linspace}
     :MATLAB {:in "linspace(a, b, n)"
-             :fn :MATLAB/linspace}}
+             :fn :MATLAB/linspace}
+    :core.matrix {:in "(defn linspace [a b n]
+  (let [dx (float (/ (- b a) (- n 1)))]
+    (m/array (range a (+ b dx) dx))))"
+                  :note "There isn't an equivalent linspace function, but it can be implemented approxiately like this."}}
    {:description "Create array from a to b spaced by dx"
     :numpy {:in "np.arange(a, b, dx)"
             :fn :numpy/arange}
     :MATLAB {:in "a:dx:b"
              :fn :MATLAB/colon}
-    :core.matrix {:in "(m/matrix (range a b dx))"}}
+    :core.matrix {:in "(m/array (range a b dx))"}}
    {:description "Create a square diagonal matrix, with the vector a on the main diagonal"
     :MATLAB {:in "diag(a)"
              :fn :MATLAB/diag}
@@ -82,30 +89,40 @@
                   :fn :core.matrix/main-diagonal}
     :math.js {:in "math.diag(A)"
               :fn :math.js/diag}}
-   {:description "Compute the elements of a matrix given i, j with given shape"
-    :MATLAB {}
+   {:description "Create a matrix with a given shape computed as a function of the indicies, i, j, etc."
+    :MATLAB {:in "A = zeros(n, m);\nfor i = 1:n\n  for j = 1:m\n    A(i, j) = i * j;\n  end\nend"
+             :note "There is no built in computed matrix constructor, but can be created like this."}
     :numpy {:in "np.fromfunction(lambda i, j: i*j, shape)"
             :fn :numpy/fromfunction}
     :core.matrix {:in "(m/compute-matrix shape (fn [i j] (* i j)))"
                   :fn :core.matrix/compute-matrix}}
 
    "Combining Arrays"
-   {:description "Concatenate arrays"
+   {:description "Concatenate 1-D arrays"
     :MATLAB {:in "[a b c]"}
     :numpy {:in "np.concatenate([a, b, c])"
             :fn :numpy/concatenate}
     :core.matrix {:in "(m/join a b c)"
                   :fn :core.matrix/join}}
+   {:description "Vertically stack arrays (row-wise)"
+    :numpy {:in "np.vstack([a, b])"
+            :fn :numpy/vstack}
+    :core.matrix {:in "(m/join a b)"
+                  :fn :core.matrix/join}
+    :MATLAB {:in "[a; b]"}}
+   {:description "Horizontally stack arrays (column-wise)"
+    :numpy {:in "np.hstack([a, b])"
+            :fn :numpy/hstack}
+    :core.matrix {:in "(m/join-along 1 a b)"
+                  :fn :core.matrix/join-along}
+    :MATLAB {:in "[a, b]"}}
    {:description "Create matrix from blocks"
     :MATLAB {:in "[a b; c d]"}
     :numpy {:in "np.block([[a, b], [c, d]])"
-            :fn :numpy/block}}
-   {:description "Vertically stack arrays (row-wise)"
-    :numpy {:in "np.vstack([a, b])"
-            :fn :numpy/vstack}}
-   {:description "Horizontally stack arrays (column-wise)"
-    :numpy {:in "np.hstack([a, b])"
-            :fn :numpy/hstack}}
+            :fn :numpy/block}
+    :core.matrix {:in "(m/join (m/join-along 1 a b)\n        (m/join-along 1 c d))"
+                  :note "There is no equivalent 'block' function, but join and join-along can be used"
+                  :fn :core.matrix/join}}
 
    "Metadata"
    {:description "Get the shape of a matrix, A"
@@ -131,10 +148,15 @@
              :fn :MATLAB/size}}
    {:description "Dimensionality"
     :core.matrix {:in "(m/dimensionality A)"
-                  :fn :core.matrix/dimensionality}}
+                  :fn :core.matrix/dimensionality}
+    :numpy {:in "A.ndim"}
+    :MATLAB {:in "ndims(A)"
+             :fn :MATLAB/ndims}}
    {:description "Get size of specified dimension in matrix A"
     :core.matrix {:in "(m/dimension-count A dim)"
-                  :fn :core.matrix/dimension-count}}
+                  :fn :core.matrix/dimension-count}
+    :MATLAB {:in "size(A, dim)" :fn :MATLAB/size}
+    :numpy {:in "np.shape(A)[dim]"}}
 
    ;; Operators
    "Operators"
@@ -359,12 +381,12 @@
     :numpy {:in "np.sum(A, axis=1)" :fn :numpy/sum}
     :core.matrix {:in "(reduce + (m/slices A 1))"}
     :MATLAB {:in "sum(A, 2)" :fn :MATLAB/sum}}
-   
+
    {:description "Minimum of matrix, A"
     :numpy {:in "np.amin(A)" :fn :numpy/amin}
     :core.matrix {:in "(m/emin A)" :fn :core.matrix/emin}
     :MATLAB {:in "min(min(A))" :fn :MATLAB/min}}
-   
+
    {:description "Maximum of matrix, A"
     :numpy {:in "np.amax(A)" :fn :numpy/amax}
     :core.matrix {:in "(m/emax A)" :fn :core.matrix/emax}
@@ -403,5 +425,5 @@
     :MATLAB {:in "containers.Map({'key'}, {'value'})"
              :fn :MATLAB/containers.map
              :note "Not very widely used"}
-    :core.matrix {:in "{:key 'value'}"
+    :core.matrix {:in "{:key \"value\"}"
                   :fn :clojure.core/hash-map}}])
