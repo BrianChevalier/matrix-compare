@@ -123,6 +123,12 @@
     :core.matrix {:in "(m/join (m/join-along 1 a b)\n        (m/join-along 1 c d))"
                   :note "There is no equivalent 'block' function, but join and join-along can be used"
                   :fn :core.matrix/join}}
+   {:description "Create an array by repeating array, a, n times"
+    :numpy {:in "np.tile(a, n)"
+            :fn :numpy/tile}
+    :MATLAB {:in "repmat(a, n)"
+             :fn :MATLAB/repmat}
+    :core.matrix {:in "(defn repmat [a n]\n  (reduce #(m/join %1 %2) (repeat n a)))"}}
 
    "Metadata"
    {:description "Get the shape of a matrix, A"
@@ -391,6 +397,19 @@
     :numpy {:in "np.amax(A)" :fn :numpy/amax}
     :core.matrix {:in "(m/emax A)" :fn :core.matrix/emax}
     :MATLAB {:in "max(max(A))"} :fn :MATLAB/max}
+   {:description "Compute the cumulative sum of vector a"
+    :core.matrix {:in "(reductions + a)"}
+    :MATLAB {:in "cumsum(a)"
+             :fn :MATLAB/cumsum}
+    :numpy {:in "np.cumsum(a)"
+            :fn :numpy/cumsum}}
+   {:description "Compute the cumulative product"
+    :MATLAB {:in "cumprod(a)"
+             :fn :MATLAB/cumprod}
+    :numpy {:in "np.cumprod(a)"
+            :fn :numpy/cumprod}
+    :core.matrix {:in "(reductions * a)"}}
+
 
    ;; Other relevant language features
    "Other relevant language features"
