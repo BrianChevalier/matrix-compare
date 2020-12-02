@@ -1,0 +1,93 @@
+body {
+  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.125em;
+  color: #333;
+  line-height: 1.5em;
+  background-color: #2E3440;
+  color:white;
+}
+
+h1 {
+  font-size: 2.5em
+}
+
+h2 {
+  font-size: 2em
+}
+
+h3 {
+  font-size: 1.5em
+}
+
+a {
+  text-decoration: none;
+  color: #5E81AC;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+}
+
+
+/* Popover https://codepen.io/chocochip/pen/zYxMgRG */
+
+.popover_title {
+  font-size: 24px;
+  line-height: 36px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.popover_wrapper {
+  position: absolute;
+  display: inline-block;
+  top: 0px;
+  right:20px;
+}
+.popover_content {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  left: -30px;
+  transform: translate(0, 10px);
+  background-color: #4C566A;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  width: auto;
+  font-size: 0.9rem;
+  min-width: 200px;
+}
+.popover_content:before {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  right: calc(50% - 10px);
+  top: -8px;
+  /*border-style: solid;*/
+  /*border-width: 0 10px 10px 10px;*/
+  /*border-color: transparent transparent #bfbfbf transparent;*/
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.popover_wrapper:hover .popover_content {
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -20px);
+  transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+.popover_message {
+  text-align: left;
+}
